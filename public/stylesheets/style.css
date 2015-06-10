@@ -29,6 +29,6 @@ footer {
 	text-align: center;
 }
 
-nav span {
+footer span, nav span {
 	margin: 0px 10px 0px 0px;
 }
