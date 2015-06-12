@@ -1,16 +1,31 @@
 var path = require('path');
 
+// Crea base de datos
+// - SQLite en local  (sqlite://:@:/)
+// - Postgres en producción (postgres://user:pass@host:port/database)
+var url = process.env.DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
+var DB_name = (url[6] || null);
+var user = (url[2] || null);
+var pwd = (url[3] || null);
+var protocol = (url[1] || null);
+var dialect = (url[1] || null);
+var port = (url[5] || null);
+var host = (url[4] || null);
+var storage = process.env.DATABASE_STORAGE;
+
 // Clase generadora de ORM
 var Sequelize = require('sequelize');
 
-// Crea base de datos SQLite 'quiz.sqlite'
 var sequelize = new Sequelize(
-	null,
-	null,
-	null,
+	DB_name,
+	user,
+	pwd,
 	{
-		dialect: 'sqlite',
-		storage: 'quiz.sqlite'
+		dialect: dialect,
+		protocol: protocol,
+		port: port,
+		host: host,
+		storage: storage
 	}
 );
 
