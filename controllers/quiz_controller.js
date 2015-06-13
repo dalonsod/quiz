@@ -8,7 +8,7 @@ exports.load = function(req, res, next, quizId) {
 			next();
 		}
 		else {
-			next(new Error('No existe el quizId' + quizId));
+			next(new Error('No existe el quizId ' + quizId));
 		}
 	}).catch(function (error) {
 		next(error);
