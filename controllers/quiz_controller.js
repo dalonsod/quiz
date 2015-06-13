@@ -17,9 +17,24 @@ exports.load = function(req, res, next, quizId) {
 
 // GET /quizes
 exports.index = function(req, res) {
-	models.Quiz.findAll().then(function(quizes) {
+	
+	// Solo si se proporciona condición de búsqueda, la procesamos 
+	//  y ordenamos alfabéticamente
+	var filter = {};
+	if ( req.query.search ) {
+		var search = '%' + req.query.search.replace(/\s/g, '%')  + '%'
+		filter = {
+			where: ["pregunta like ?", search],
+			order: 'pregunta'
+		};
+	}
+
+	// Adicionalmente, entregamos a la vista el filtro realizado, 
+	//  para poder mostrarlo en pantalla, de haberlo (ver views/quizes/index.ejs)
+	models.Quiz.findAll(filter).then(function(quizes) {
 		res.render('quizes/index', {
-			quizes: quizes
+			quizes: quizes,
+			search: req.query.search
 		});
 	});
 }
