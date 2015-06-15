@@ -15,3 +15,7 @@ body {
 footer, input {
 	font-size: large;
 }
+
+label.rem {
+	display: none;
+}
