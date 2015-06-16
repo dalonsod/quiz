@@ -20,6 +20,8 @@ router.get('/quizes/:quizId(\\d+)',        quizController.show);
 router.get('/quizes/:quizId(\\d+)/answer', quizController.answer);
 router.get('/quizes/new',                  quizController.new);
 router.post('/quizes/create',              quizController.create);
+router.get('/quizes/:quizId(\\d+)/edit',   quizController.edit);
+router.put('/quizes/:quizId(\\d+)',        quizController.update);
 
 // Página de créditos: dado que es sencillo, 
 //  se opta por no hacer un controlador específico
