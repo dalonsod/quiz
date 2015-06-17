@@ -1,3 +1,14 @@
+// MW de autorización: redirige a la página de login si el acceso 
+//  no está autorizado. Si todo es correcto, cede el control al siguiente MW
+exports.loginRequired  = function(req, res, next) {
+	if ( req.session.user ) {
+		next();
+	}
+	else {
+		res.redirect('/login');
+	}
+} 
+
 // GET /login
 exports.new = function(req, res) {
 	// Se salvaguardan los posibles errores producidos y se limpian
