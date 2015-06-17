@@ -29,14 +29,20 @@ var sequelize = new Sequelize(
 	}
 );
 
-// Importación: sequelize recoge la definición de la tabla de preguntas 
-//              desde el modelo
+// Importación: sequelize recoge la definición de las tablas desde el modelo
+// - Tabla de preguntas
 var Quiz = sequelize.import(path.join(__dirname, 'quiz'));
+// - Tabla de respuestas, con relación 1-N con las preguntas
+var Comment = sequelize.import(path.join(__dirname, 'comment'));
+Comment.belongsTo(Quiz);   // Esto añade un campo 'QuizId' en la tabla de comentarios (ver comment_controller.js => exports.create)
+Quiz.hasMany(Comment);
 
 // Exportación: la hacemos disponible desde este módulo
 exports.Quiz = Quiz;
+exports.Comment = Comment;
 
-// Por último, realizamos la inicialización, que crea la tabla y la inicializa
+// Por último, realizamos la inicialización, que crea las tablas 
+//  e inicializa la de preguntas
 sequelize.sync().then(function () {
 	// Solo la inicializamos si está vacía
 	Quiz.count().then(function (count) {
