@@ -4,6 +4,7 @@ var router = express.Router();
 // Controladores existentes
 var quizController = require('../controllers/quiz_controller');
 var commentController = require('../controllers/comment_controller');
+var sessionController = require('../controllers/session_controller');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -15,6 +16,11 @@ router.get('/', function(req, res) {
 
 // Autoload de parámetro quizId
 router.param('quizId', quizController.load);
+
+// Rutas de gestión de la sesión
+router.get('/login',	sessionController.new);
+router.post('/login',	sessionController.create);
+router.get('/logout',	sessionController.destroy);   // Debería ser DELETE /login
 
 // Rutas de /quizes
 router.get('/quizes',                      quizController.index);
