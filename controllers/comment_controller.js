@@ -1,5 +1,22 @@
 var models = require('../models/models.js');
 
+// Autoload del id. del comentario
+exports.load = function(req, res, next, commentId) {
+	models.Comment.find({
+		where: { id: Number(commentId) }
+	}).then(function(comment) {
+		if ( comment ) {
+			req.comment = comment;
+			next();
+		}
+		else {
+			next(new Error('No existe el commentId=' + commentId));
+		}
+	}).catch(function(error) {
+		next(error);
+	})
+}
+
 // GET /quizes/:quizId/comment/new
 exports.new = function(req, res) {
 	res.render('comments/new', {
@@ -34,4 +51,20 @@ exports.create = function(req, res) {
 			});
 		}
 	})
+}
+
+// GET /quizes/:quizId/comment/:commentId/pubish
+exports.publish = function (req, res) {
+	// Gracias al autoload nos llega el comentario, al que añadimos 
+	//  la marca de publicado
+	req.comment.publicado = true;
+
+	req.comment.save({
+		fields: ['publicado']
+	}).then(function() { 
+		// También valdría req.comment.QuizId
+		res.redirect('/quizes/' + req.params.quizId); 
+	}).catch(function(error) {
+		next(error);
+	});
 }

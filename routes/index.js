@@ -15,7 +15,8 @@ router.get('/', function(req, res) {
 });
 
 // Autoload de parámetro quizId
-router.param('quizId', quizController.load);
+router.param('quizId', 	  quizController.load);
+router.param('commentId', commentController.load);
 
 // Rutas de gestión de la sesión
 router.get('/login',	sessionController.new);
@@ -32,8 +33,12 @@ router.get('/quizes/:quizId(\\d+)/edit',   sessionController.loginRequired, quiz
 router.put('/quizes/:quizId(\\d+)',        sessionController.loginRequired, quizController.update);
 router.delete('/quizes/:quizId(\\d+)',     sessionController.loginRequired, quizController.destroy);
 
-router.get('/quizes/:quizId(\\d+)/comments/new', commentController.new);
-router.post('/quizes/:quizId(\\d+)/comments',    commentController.create);
+router.get('/quizes/:quizId(\\d+)/comments/new', 						commentController.new);
+router.post('/quizes/:quizId(\\d+)/comments',    						commentController.create);
+// Debería ser PUT /...
+router.get('/quizes/:quizId(\\d+)/comments/:commentId(\\d+)/publish',
+	sessionController.loginRequired, commentController.publish
+);
 
 // Página de créditos: dado que es sencillo, 
 //  se opta por no hacer un controlador específico
