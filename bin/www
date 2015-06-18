@@ -18,5 +18,5 @@ var serverSecure = https.createServer({
 	app
 );
 serverSecure.listen(8443, function() {
-  debug('Express server listening on port ' + server.address().port);
+  debug('Express server listening on port ' + serverSecure.address().port);
 });
