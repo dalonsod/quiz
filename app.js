@@ -53,6 +53,36 @@ app.use(function(req, res, next) {
 
 });
 
+// Control de autologout (tiempo máximo de inactividad: 2 minutos)
+var inactivityMaxPeriodMillisecs = 2*60*1000;
+app.use(function(req, res, next) {
+
+    // Actualización de marcas de tiempo: se usa tiempo absoluto para 
+    //  convertirlo desde las variables de sesión, que son String
+    var currentTimestamp = new Date().getTime();
+    var lastTimestamp = (+req.session.timestamp);
+    req.session.timestamp = currentTimestamp;
+
+    // Solo si hay sesión se hace la validación
+    if ( req.session.user ) {
+        var diffMilliseconds = currentTimestamp - lastTimestamp;
+        // Tiempo máximo de inactividad: 2 minutos
+        if ( diffMilliseconds > inactivityMaxPeriodMillisecs ) {
+            // Esto suprimirá la sesión
+            delete req.session.user;
+            req.session.errors = [
+                {'message': 'Tiempo máximo de inactividad superado, autentíquese de nuevo'}
+            ];
+            res.redirect('/login');
+            return;
+        }
+    }
+
+    // Si todo es correcto, se continúa
+    next();
+
+});
+
 app.use('/', routes);
 
 // catch 404 and forward to error handler
